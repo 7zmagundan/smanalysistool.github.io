@@ -110,15 +110,39 @@ function renderRanking() {
     return;
   }
 
-  sArea.innerHTML = sRank.slice(0, 5).map((r, i) =>
-    `<p><img src="${RANKING_ICONS[r.type]}" class="rank-icon">${i + 1}位　${r.name}　S度 ${r.Spercent}%</p>`
+  // ★ 最大3位まで
+  sArea.innerHTML = sRank.slice(0, 3).map((r, i) =>
+    `<p class="rank-item">
+       <img src="${RANKING_ICONS[r.type]}" class="rank-icon ${i === 0 ? "rank-icon-top" : ""}">
+       ${i + 1}位　${r.name}　S度 ${r.Spercent}%
+     </p>`
   ).join("");
 
-  mArea.innerHTML = mRank.slice(0, 5).map((r, i) =>
-    `<p><img src="${RANKING_ICONS[r.type]}" class="rank-icon">${i + 1}位　${r.name}　M度 ${r.Mpercent}%</p>`
+  mArea.innerHTML = mRank.slice(0, 3).map((r, i) =>
+    `<p class="rank-item">
+       <img src="${RANKING_ICONS[r.type]}" class="rank-icon ${i === 0 ? "rank-icon-top" : ""}">
+       ${i + 1}位　${r.name}　M度 ${r.Mpercent}%
+     </p>`
   ).join("");
 }
 
+function renderRankingMore() {
+  const history = JSON.parse(localStorage.getItem("sm_history") || "[]");
+  const area = document.getElementById("ranking-more");
+
+  if (history.length === 0) {
+    area.innerHTML = '<p class="ranking-empty">履歴がありません</p>';
+    return;
+  }
+
+  area.innerHTML = history.map((r, i) =>
+    `<p>
+       <img src="${RANKING_ICONS[r.type]}" class="rank-icon">
+       ${i + 1}位　${r.name}　
+       S度 ${r.Spercent}% / M度 ${r.Mpercent}%
+     </p>`
+  ).join("");
+}
 
 /* =========================================================
    ページ切り替え
@@ -236,6 +260,12 @@ function finishQuiz() {
   document.getElementById("bar-M").style.width = Mpercent + "%";
 
   showPage("page-result");
+  
+  // ★ はんこアニメーション
+  const stamp = document.getElementById("result-stamp");
+  stamp.classList.remove("stamp-animate"); // 再発火用
+  void stamp.offsetWidth;                  // 強制リフロー
+  stamp.classList.add("stamp-animate");
 }
 
 /* =========================================================
@@ -357,4 +387,18 @@ window.addEventListener("DOMContentLoaded", () => {
     // LINEのテキスト共有（アプリ or ブラウザ）
     window.open(`https://line.me/R/msg/text/?${url}`, "_blank");
   });
+  document.getElementById("btn-more-ranking").addEventListener("click", () => {
+  const box = document.getElementById("ranking-more");
+  const isOpen = box.style.display === "block";
+
+  if (isOpen) {
+    box.style.display = "none";
+    document.getElementById("btn-more-ranking").textContent = "もっと見る";
+  } else {
+    renderRankingMore();
+    box.style.display = "block";
+    document.getElementById("btn-more-ranking").textContent = "閉じる";
+  }
+});
+
 });

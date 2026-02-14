@@ -465,13 +465,65 @@ p {
 /* 結果画面右上の印影（はんこ） */
 .result-stamp {
   position: absolute;
-  top: -10px;
-  right: -10px;
-  width: 90px;
-  opacity: 0.9;
+  top: -4px;
+  right: -4px;
+
+  width: 16vw;       /* 画面幅の16% */
+  max-width: 70px;   /* 上限 */
+  min-width: 45px;   /* 下限 */
+
+  opacity: 0;
   pointer-events: none;
+  transform: rotate(-8deg) scale(0.8);
 }
+
 
 #page-result .card {
   position: relative;
+}@keyframes stampPop {
+  0% {
+    opacity: 0;
+    transform: rotate(-8deg) scale(0.4);
+  }
+  60% {
+    opacity: 1;
+    transform: rotate(-4deg) scale(1.15);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-6deg) scale(1);
+  }
 }
+
+/* アニメーションを適用するクラス */
+.stamp-animate {
+  animation: stampPop 0.35s ease-out forwards;
+}
+/* ランキングを縦並びにする */
+.ranking-container {
+  display: block !important;
+}
+
+.ranking-block {
+  width: 100%;
+  margin-bottom: 16px;
+}
+/* ランキングカードの背景 */
+.ranking-block {
+  background: #FFF7FB;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+/* 通常アイコン */
+.rank-icon {
+  width: 24px;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+/* 1位だけ大きく */
+.rank-icon-top {
+  width: 34px;
+}
+

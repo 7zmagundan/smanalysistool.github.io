@@ -23,6 +23,18 @@
       </div>
 
       <div class="card">
+        <h2>診断をはじめる</h2>
+        <p>名前を入力して「開始」を押すと、全10問の診断が始まります。</p>
+
+        <div class="input-row">
+          <input id="input-name" class="input-text" type="text" placeholder="名前を入力（ニックネームでもOK）">
+          <button id="btn-start" class="btn">開始</button>
+        </div>
+
+        <p class="small-note">※結果はこの端末の中だけに保存されます。</p>
+      </div>
+
+      <div class="card">
         <h2>ランキング</h2>
         <p class="note">この端末で診断した結果が自動で記録されます。</p>
 
@@ -45,19 +57,12 @@
         <button id="btn-clear-history" class="btn-ghost btn full">履歴を削除する</button>
       </div>
 
-      <div class="card">
-        <h2>診断をはじめる</h2>
-        <p>名前を入力して「開始」を押すと、全10問の診断が始まります。</p>
-
-        <div class="input-row">
-          <input id="input-name" class="input-text" type="text" placeholder="名前を入力（ニックネームでもOK）">
-          <button id="btn-start" class="btn">開始</button>
-        </div>
-
-        <p class="small-note">※結果はこの端末の中だけに保存されます。</p>
-      </div>
-
     </div>
+    <button id="btn-more-ranking" class="btn-ghost btn full" style="margin-top: 8px;">
+      もっと見る
+    </button>
+
+    <div id="ranking-more" style="display:none; margin-top:12px;"></div>
 
     <!-- Page 2: Quiz -->
     <div id="page-quiz" class="page">
