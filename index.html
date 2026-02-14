@@ -76,9 +76,12 @@
 
         <!-- ラベル（左右ランダム） -->
         <div class="label-row">
-          <!-- ★ 変更：class="label-text" を付与 -->
-          <span id="label-left" class="label-text"></span>
-          <span id="label-right" class="label-text"></span>
+          <div class="label-col label-col-left">
+            <span id="label-left" class="label-text"></span>
+          </div>
+          <div class="label-col label-col-right">
+            <span id="label-right" class="label-text"></span>
+          </div>
         </div>
 
         <!-- ★ 追加：中央の薄い縦線用 -->
@@ -132,6 +135,10 @@
       <div class="card">
         <button id="btn-again" class="btn btn-secondary full">もう一度診断する</button>
         <button id="btn-to-home" class="btn-ghost btn full">ホームに戻る</button>
+        <!-- ★ 追加：LINEで結果をシェア -->
+        <button id="btn-share-line" class="btn full" style="margin-top: 8px; background: #06C755;">
+          LINEで結果をシェア
+        </button>
       </div>
 
     </div>

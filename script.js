@@ -343,3 +343,18 @@ document.addEventListener("click", (e) => {
     circle.classList.add("ripple");
   }
 });
+window.addEventListener("DOMContentLoaded", () => {
+  // …既存の処理…
+
+  document.getElementById("btn-share-line").addEventListener("click", () => {
+    const name = currentName || "名無し";
+    const resultText = document.getElementById("result-comment").textContent || "";
+    const typeBadge = document.getElementById("result-name").textContent || "";
+
+    const text = `${typeBadge}\n${resultText}\n\nSM分析ツールで診断したよ！`;
+    const url = encodeURIComponent(text);
+
+    // LINEのテキスト共有（アプリ or ブラウザ）
+    window.open(`https://line.me/R/msg/text/?${url}`, "_blank");
+  });
+});
