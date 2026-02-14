@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>SM分析ツール</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ★ 追加：Kosugi Maru -->
+  <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -72,9 +76,13 @@
 
         <!-- ラベル（左右ランダム） -->
         <div class="label-row">
-          <span id="label-left"></span>
-          <span id="label-right"></span>
+          <!-- ★ 変更：class="label-text" を付与 -->
+          <span id="label-left" class="label-text"></span>
+          <span id="label-right" class="label-text"></span>
         </div>
+
+        <!-- ★ 追加：中央の薄い縦線用 -->
+        <div class="label-divider"></div>
 
         <!-- 丸ボタン（大・中・小） -->
         <div class="circle-row">
@@ -101,7 +109,9 @@
         <div class="badge">診断結果</div>
 
         <div id="result-name" class="result-name"></div>
-        <div id="result-type-badge" class="result-type-badge type-B">タイプ</div>
+
+        <!-- ★ 変更：テキストバッジ → 画像バッジ -->
+        <img id="result-badge-img" class="result-badge-img" src="" alt="タイプバッジ">
 
         <div id="result-comment" class="result-comment"></div>
         <div id="result-desc" class="result-desc"></div>

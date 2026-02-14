@@ -53,6 +53,24 @@ const questions = [
     optionB: "受け取る側"
   }
 ];
+/* =========================================================
+   画像マッピング
+========================================================= */
+const BADGE_IMAGES = {
+  "ドSタイプ": "assets/images/badge/badge-dos.png",
+  "ちょいSタイプ": "assets/images/badge/badge-chois.png",
+  "バランスタイプ": "assets/images/badge/badge-balance.png",
+  "ちょいMタイプ": "assets/images/badge/badge-choim.png",
+  "ドMタイプ": "assets/images/badge/badge-dom.png",
+};
+
+const RANKING_ICONS = {
+  "ドSタイプ": "assets/images/ranking/ranking-icon-dos.png",
+  "ちょいSタイプ": "assets/images/ranking/ranking-icon-chois.png",
+  "バランスタイプ": "assets/images/ranking/ranking-icon-balance.png",
+  "ちょいMタイプ": "assets/images/ranking/ranking-icon-choim.png",
+  "ドMタイプ": "assets/images/ranking/ranking-icon-dom.png",
+};
 
 /* =========================================================
    localStorage 保存
@@ -93,13 +111,14 @@ function renderRanking() {
   }
 
   sArea.innerHTML = sRank.slice(0, 5).map((r, i) =>
-    `<p>${i + 1}位　${r.name}　S度 ${r.Spercent}%</p>`
+    `<p><img src="${RANKING_ICONS[r.type]}" class="rank-icon">${i + 1}位　${r.name}　S度 ${r.Spercent}%</p>`
   ).join("");
 
   mArea.innerHTML = mRank.slice(0, 5).map((r, i) =>
-    `<p>${i + 1}位　${r.name}　M度 ${r.Mpercent}%</p>`
+    `<p><img src="${RANKING_ICONS[r.type]}" class="rank-icon">${i + 1}位　${r.name}　M度 ${r.Mpercent}%</p>`
   ).join("");
 }
+
 
 /* =========================================================
    ページ切り替え
@@ -205,12 +224,8 @@ function finishQuiz() {
   document.getElementById("result-name").textContent =
     (currentName || "名無し") + "さんのタイプは…";
 
-  const badge = document.getElementById("result-type-badge");
-  badge.textContent = type;
-  badge.className = "result-type-badge";
-  if (type.includes("S")) badge.classList.add("type-S");
-  else if (type.includes("M")) badge.classList.add("type-M");
-  else badge.classList.add("type-B");
+  document.getElementById("result-badge-img").src = BADGE_IMAGES[type];
+
 
   document.getElementById("result-comment").textContent = info.comment;
   document.getElementById("result-desc").textContent = info.desc;
@@ -315,4 +330,16 @@ window.addEventListener("DOMContentLoaded", () => {
       alert("履歴を削除しました");
     }
   });
+});
+/* =========================================================
+   丸ボタンの波紋エフェクト
+========================================================= */
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("circle")) {
+    const circle = e.target;
+    circle.classList.remove("ripple");
+    // 再トリガー用
+    void circle.offsetWidth;
+    circle.classList.add("ripple");
+  }
 });
