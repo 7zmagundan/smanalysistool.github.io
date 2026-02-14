@@ -1,0 +1,342 @@
+/* ================================
+   Base Layout
+================================ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #FFEAF4, #E8FFF7);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px 12px 40px;
+  color: #333;
+}
+
+.app {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* ================================
+   Cards
+================================ */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  padding: 20px 18px;
+  margin-bottom: 16px;
+  animation: fadeInUp 0.3s ease;
+}
+
+/* ================================
+   Titles / Text
+================================ */
+.title-main {
+  font-size: 24px;
+  font-weight: 800;
+  text-align: center;
+  color: #FF7BA5;
+  margin-bottom: 4px;
+}
+
+.title-sub {
+  font-size: 12px;
+  text-align: center;
+  color: #777;
+  margin-bottom: 12px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  color: #fff;
+  background: linear-gradient(135deg, #FF7BA5, #FF9BC0);
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+h3 {
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.note {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.small-note {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+}
+
+/* ================================
+   Inputs / Buttons
+================================ */
+.input-row {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.input-text {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid #FFD1E5;
+  padding: 10px 14px;
+  font-size: 14px;
+  outline: none;
+  background: #FFFFFFCC;
+}
+
+.input-text:focus {
+  border-color: #FF7BA5;
+  box-shadow: 0 0 0 2px rgba(255,123,165,0.25);
+}
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #FF7BA5, #FF9BC0);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, opacity 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #4FD1C5, #7BE3D8);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #FF7BA5;
+  box-shadow: none;
+  border: 1px solid #FF7BA5;
+}
+
+.btn.full {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* ================================
+   Ranking
+================================ */
+.ranking-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ranking-block {
+  flex: 1;
+  min-width: 140px;
+}
+
+.rank-title-s {
+  color: #FF7BA5;
+}
+
+.rank-title-m {
+  color: #4FD1C5;
+}
+
+.ranking-list p {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.ranking-empty {
+  font-size: 12px;
+  color: #999;
+}
+
+/* ================================
+   Page Switching
+================================ */
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+/* ================================
+   Quiz Page
+================================ */
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #777;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: #E5E5E5;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progress-inner {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #FF7BA5, #4FD1C5);
+  transition: width 0.2s ease;
+}
+
+.question-text {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+/* ================================
+   Answer Buttons（ランダム配置）
+================================ */
+.scale-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.scale-option {
+  border-radius: 12px;
+  padding: 12px 10px;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #FFD1E5;
+  background: #FFE4F0; /* ← パステル単色 */
+  color: #333;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
+}
+
+.scale-option.selected {
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  background: #FFB6CF; /* 選択時だけ少し濃く */
+}
+
+/* ================================
+   Result Page
+================================ */
+.result-name {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.result-type-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.type-S {
+  background: linear-gradient(135deg, #FF7BA5, #FF9BC0);
+}
+
+.type-M {
+  background: linear-gradient(135deg, #4FD1C5, #7BE3D8);
+}
+
+.type-B {
+  background: linear-gradient(135deg, #B794F4, #D6BCFA);
+}
+
+.result-comment {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.result-desc {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* ================================
+   Result Bars
+================================ */
+.bar-wrap {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.bar-label {
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.bar-bg {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #E5E5E5;
+  overflow: hidden;
+}
+
+.bar-inner-S {
+  height: 100%;
+  background: linear-gradient(90deg, #FF7BA5, #FF9BC0);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.bar-inner-M {
+  height: 100%;
+  background: linear-gradient(90deg, #4FD1C5, #7BE3D8);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* ================================
+   Animation
+================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
