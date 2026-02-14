@@ -2,18 +2,657 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <title>SM分析ツール</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My Page</title>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
-      font-family: sans-serif;
-      padding: 20px;
-      background: #f7f7f7;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #FFEAF4, #E8FFF7);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px 12px 40px;
+      color: #333;
+    }
+    .app {
+      width: 100%;
+      max-width: 480px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      padding: 20px 18px;
+      margin-bottom: 16px;
+      animation: fadeInUp 0.3s ease;
+    }
+    .title-main {
+      font-size: 24px;
+      font-weight: 800;
+      text-align: center;
+      color: #FF7BA5;
+      margin-bottom: 4px;
+    }
+    .title-sub {
+      font-size: 12px;
+      text-align: center;
+      color: #777;
+      margin-bottom: 12px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      color: #fff;
+      background: linear-gradient(135deg, #FF7BA5, #FF9BC0);
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    h3 {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+    p {
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+    .input-row {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    .input-text {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid #FFD1E5;
+      padding: 10px 14px;
+      font-size: 14px;
+      outline: none;
+      background: #FFFFFFCC;
+    }
+    .input-text:focus {
+      border-color: #FF7BA5;
+      box-shadow: 0 0 0 2px rgba(255,123,165,0.25);
+    }
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(135deg, #FF7BA5, #FF9BC0);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: transform 0.08s ease, box-shadow 0.08s ease, opacity 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn:active {
+      transform: scale(0.96);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .btn-secondary {
+      background: linear-gradient(135deg, #4FD1C5, #7BE3D8);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: #FF7BA5;
+      box-shadow: none;
+      border: 1px solid #FF7BA5;
+    }
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .ranking-list p {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .ranking-empty {
+      font-size: 12px;
+      color: #999;
+    }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: #777;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: #E5E5E5;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .progress-inner {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #FF7BA5, #4FD1C5);
+      transition: width 0.2s ease;
+    }
+    .question-text {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .scale-label {
+      font-size: 11px;
+      text-align: center;
+      color: #777;
+      margin-bottom: 6px;
+    }
+    .scale-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .scale-option {
+      border-radius: 999px;
+      padding: 8px 4px;
+      font-size: 11px;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid transparent;
+      color: #333;
+      background: #F0F0F0;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+    .scale-option.small {
+      font-size: 10px;
+    }
+    .scale-option[data-value="0"] { background: #FFB6CF; color: #fff; }
+    .scale-option[data-value="1"] { background: #FFD1E5; }
+    .scale-option[data-value="2"] { background: #F0F0F0; }
+    .scale-option[data-value="3"] { background: #C9F3E7; }
+    .scale-option[data-value="4"] { background: #4FD1C5; color: #fff; }
+    .scale-option.selected {
+      transform: scale(1.03);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      border-color: rgba(0,0,0,0.1);
+    }
+    .result-type-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .type-S { background: linear-gradient(135deg, #FF7BA5, #FF9BC0); }
+    .type-M { background: linear-gradient(135deg, #4FD1C5, #7BE3D8); }
+    .type-B { background: linear-gradient(135deg, #B794F4, #D6BCFA); }
+    .bar-wrap {
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+    .bar-label {
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+    .bar-bg {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #E5E5E5;
+      overflow: hidden;
+    }
+    .bar-inner-S {
+      height: 100%;
+      background: linear-gradient(90deg, #FF7BA5, #FF9BC0);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .bar-inner-M {
+      height: 100%;
+      background: linear-gradient(90deg, #4FD1C5, #7BE3D8);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .result-name {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .result-comment {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .result-desc {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .small-note {
+      font-size: 11px;
+      color: #999;
+      margin-top: 4px;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <h1>こんにちは！</h1>
-  <p>これは GitHub Pages で公開したページです。</p>
+  <div class="app">
+    <!-- Page 1: Home -->
+    <div id="page-home" class="page active">
+      <div class="card">
+        <div class="badge">性格診断ゲーム</div>
+        <div class="title-main">SM分析ツール</div>
+        <div class="title-sub">あなたの「S度」と「M度」をゆるっと診断します</div>
+      </div>
+
+      <div class="card">
+        <h2>ランキング</h2>
+        <p style="font-size:13px; color:#777; margin-bottom:10px;">
+          この端末で診断した結果が自動で記録されます。
+        </p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:140px;">
+            <h3 style="color:#FF7BA5;">ドSランキング</h3>
+            <div id="s-ranking" class="ranking-list">
+              <p class="ranking-empty">まだ診断結果がありません</p>
+            </div>
+          </div>
+          <div style="flex:1; min-width:140px;">
+            <h3 style="color:#4FD1C5;">ドMランキング</h3>
+            <div id="m-ranking" class="ranking-list">
+              <p class="ranking-empty">まだ診断結果がありません</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>診断をはじめる</h2>
+        <p>名前を入力して「開始」を押すと、全10問の診断が始まります。</p>
+        <div class="input-row">
+          <input id="input-name" class="input-text" type="text" placeholder="名前を入力（ニックネームでもOK）">
+          <button class="btn" id="btn-start">開始</button>
+        </div>
+        <p class="small-note">※結果はこの端末の中だけに保存されます。</p>
+      </div>
+    </div>
+
+    <!-- Page 2: Quiz -->
+    <div id="page-quiz" class="page">
+      <div class="card">
+        <div class="question-header">
+          <span id="quiz-counter">Q1 / 10</span>
+          <span id="quiz-name-label"></span>
+        </div>
+        <div class="progress-bar">
+          <div id="quiz-progress" class="progress-inner"></div>
+        </div>
+        <div class="question-text" id="quiz-question"></div>
+        <div class="scale-label">
+          <span style="float:left; color:#FF7BA5;">S寄り</span>
+          <span style="float:right; color:#4FD1C5;">M寄り</span>
+        </div>
+        <div style="clear:both;"></div>
+        <div class="scale-row" id="scale-row">
+          <!-- options injected by JS -->
+        </div>
+        <p class="small-note" id="quiz-hint">どれか1つをタップすると次の質問へ進みます。</p>
+      </div>
+      <div class="card">
+        <div class="btn-row">
+          <button class="btn-ghost btn" id="btn-back-home">ホームに戻る</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page 3: Result -->
+    <div id="page-result" class="page">
+      <div class="card">
+        <div class="badge">診断結果</div>
+        <div class="result-name" id="result-name"></div>
+        <div id="result-type-badge" class="result-type-badge type-B">タイプ</div>
+        <div class="result-comment" id="result-comment"></div>
+        <div class="result-desc" id="result-desc"></div>
+
+        <div class="bar-wrap">
+          <div class="bar-label" id="label-S">S度 0%</div>
+          <div class="bar-bg">
+            <div id="bar-S" class="bar-inner-S"></div>
+          </div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar-label" id="label-M">M度 0%</div>
+          <div class="bar-bg">
+            <div id="bar-M" class="bar-inner-M"></div>
+          </div>
+        </div>
+
+        <p class="small-note">※この結果はあくまでネタ診断です。深く考えすぎず、楽しんでください。</p>
+      </div>
+
+      <div class="card">
+        <div class="btn-row">
+          <button class="btn btn-secondary" id="btn-again">もう一度診断する</button>
+          <button class="btn-ghost btn" id="btn-to-home">ホームに戻る</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 質問データ
+    const questions = [
+      {
+        text: "誰かにからかわれたとき、どんな反応をする？",
+        optionA: "すぐ言い返したくなる",
+        optionB: "なんか嬉しくなって笑ってしまう"
+      },
+      {
+        text: "グループでの話し合いでは？",
+        optionA: "自然とまとめ役になる",
+        optionB: "誰かの意見を聞いて流れに乗る"
+      },
+      {
+        text: "友達のミスを見たとき",
+        optionA: "軽くツッコむタイプ",
+        optionB: "フォローしたくなるタイプ"
+      },
+      {
+        text: "好きな人にはどう接する？",
+        optionA: "ついからかって反応を見たくなる",
+        optionB: "相手のペースに合わせて寄り添う"
+      },
+      {
+        text: "ケンカしたときの自分は？",
+        optionA: "勝ち負けをはっきりさせたい",
+        optionB: "とりあえず仲直りしたい"
+      },
+      {
+        text: "相手に褒められると？",
+        optionA: "「でしょ？」ってちょっと得意げになる",
+        optionB: "「そんなことないよ」って言いながら嬉しい"
+      },
+      {
+        text: "驚かされたりドッキリされたら？",
+        optionA: "「やったな！」ってやり返したくなる",
+        optionB: "驚きつつも笑って受け止める"
+      },
+      {
+        text: "ストレスが溜まったときは？",
+        optionA: "スポーツとかで発散",
+        optionB: "癒されるものに逃げる"
+      },
+      {
+        text: "目立つ場面では？",
+        optionA: "つい引っ張っていく",
+        optionB: "支える側でいたい"
+      },
+      {
+        text: "自分の性格を一言で言うと？",
+        optionA: "仕掛ける側",
+        optionB: "受け取る側"
+      }
+    ];
+
+    // 5段階 → S/Mスコア
+    function getScore(value) {
+      switch (value) {
+        case 0: return { S: 2, M: 0 };
+        case 1: return { S: 1, M: 0 };
+        case 2: return { S: 0, M: 0 };
+        case 3: return { S: 0, M: 1 };
+        case 4: return { S: 0, M: 2 };
+      }
+      return { S: 0, M: 0 };
+    }
+
+    // タイプ判定
+    function judgeType(S, M) {
+      const diff = S - M;
+      if (diff >= 6) return "ドSタイプ";
+      if (diff >= 3) return "ちょいSタイプ";
+      if (diff <= -6) return "ドMタイプ";
+      if (diff <= -3) return "ちょいMタイプ";
+      return "バランスタイプ";
+    }
+
+    // タイプごとのコメント
+    function getTypeInfo(type) {
+      switch (type) {
+        case "ドSタイプ":
+          return {
+            comment: "主導権は渡さない、頼れるドSタイプ。",
+            desc: "決断力があり、場を引っ張るのが得意なタイプ。ツッコミやいじりも多めですが、本気で嫌がるラインはちゃんと分かっているはず…たぶん。"
+          };
+        case "ちょいSタイプ":
+          return {
+            comment: "やるときはやる、ちょいSバランス。",
+            desc: "普段は穏やかだけれど、ここぞというときは主導権を取れるタイプ。いじるのもいじられるのも、どちらもこなせる器用さがあります。"
+          };
+        case "ドMタイプ":
+          return {
+            comment: "愛されいじられキャラなドMタイプ。",
+            desc: "相手に合わせるのが得意で、空気を読む力が高いタイプ。いじられても、なんだかんだ楽しんでいるところも。周りからは「優しい」「話しやすい」と思われがちです。"
+          };
+        case "ちょいMタイプ":
+          return {
+            comment: "平和主義な、ちょいMバランス。",
+            desc: "自分からグイグイ行くより、相手に合わせる方が楽なタイプ。でも、ちゃんと自分の意見も持っている柔らかいバランス型です。"
+          };
+        default:
+          return {
+            comment: "バランス感覚のいいニュートラルタイプ。",
+            desc: "SっぽさもMっぽさもほどよく持ち合わせたバランス型。相手や場面に合わせて、自然に立ち位置を変えられる柔軟さがあります。"
+          };
+      }
+    }
+
+    // localStorage 保存
+    function saveResult(name, Spercent, Mpercent, type) {
+      const record = {
+        name,
+        Spercent,
+        Mpercent,
+        type,
+        date: new Date().toISOString()
+      };
+      const history = JSON.parse(localStorage.getItem("sm_history") || "[]");
+      history.push(record);
+      localStorage.setItem("sm_history", JSON.stringify(history));
+    }
+
+    // ランキング取得
+    function getRanking() {
+      const history = JSON.parse(localStorage.getItem("sm_history") || "[]");
+      const sRank = [...history].sort((a, b) => b.Spercent - a.Spercent);
+      const mRank = [...history].sort((a, b) => b.Mpercent - a.Mpercent);
+      return { sRank, mRank };
+    }
+
+    // ランキング描画
+    function renderRanking() {
+      const { sRank, mRank } = getRanking();
+      const sArea = document.getElementById("s-ranking");
+      const mArea = document.getElementById("m-ranking");
+
+      if (sRank.length === 0) {
+        sArea.innerHTML = '<p class="ranking-empty">まだ診断結果がありません</p>';
+        mArea.innerHTML = '<p class="ranking-empty">まだ診断結果がありません</p>';
+        return;
+      }
+
+      sArea.innerHTML = sRank.slice(0, 5).map((r, i) =>
+        `<p>${i + 1}位　${r.name}　S度 ${r.Spercent}%</p>`
+      ).join("");
+
+      mArea.innerHTML = mRank.slice(0, 5).map((r, i) =>
+        `<p>${i + 1}位　${r.name}　M度 ${r.Mpercent}%</p>`
+      ).join("");
+    }
+
+    // ページ切り替え
+    function showPage(id) {
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    // 状態
+    let currentName = "";
+    let currentIndex = 0;
+    let answers = []; // 0-4
+
+    // 質問画面の描画
+    function renderQuestion() {
+      const q = questions[currentIndex];
+      const total = questions.length;
+
+      document.getElementById("quiz-counter").textContent = `Q${currentIndex + 1} / ${total}`;
+      document.getElementById("quiz-name-label").textContent = currentName ? `対象：${currentName}` : "";
+      document.getElementById("quiz-question").textContent = q.text;
+
+      const progress = ((currentIndex) / total) * 100;
+      document.getElementById("quiz-progress").style.width = progress + "%";
+
+      const row = document.getElementById("scale-row");
+      row.innerHTML = "";
+
+      const labels = [
+        q.optionA,
+        "どちらかといえばA",
+        "中立",
+        "どちらかといえばB",
+        q.optionB
+      ];
+
+      for (let i = 0; i < 5; i++) {
+        const div = document.createElement("div");
+        div.className = "scale-option" + (labels[i].length > 10 ? " small" : "");
+        div.dataset.value = i;
+        div.textContent = labels[i];
+        div.addEventListener("click", () => selectAnswer(i, div));
+        row.appendChild(div);
+      }
+    }
+
+    function selectAnswer(value, element) {
+      // 選択状態の見た目
+      document.querySelectorAll(".scale-option").forEach(el => el.classList.remove("selected"));
+      element.classList.add("selected");
+
+      answers[currentIndex] = value;
+
+      // 少し待ってから次へ
+      setTimeout(() => {
+        if (currentIndex < questions.length - 1) {
+          currentIndex++;
+          renderQuestion();
+        } else {
+          finishQuiz();
+        }
+      }, 160);
+    }
+
+    // 診断終了 → 結果計算
+    function finishQuiz() {
+      let S = 0, M = 0;
+      answers.forEach(v => {
+        const s = getScore(v);
+        S += s.S;
+        M += s.M;
+      });
+
+      const total = S + M || 1;
+      const Spercent = Math.round((S / total) * 100);
+      const Mpercent = Math.round((M / total) * 100);
+      const type = judgeType(S, M);
+      const info = getTypeInfo(type);
+
+      // 保存
+      saveResult(currentName || "名無し", Spercent, Mpercent, type);
+      renderRanking();
+
+      // 結果画面に反映
+      document.getElementById("result-name").textContent =
+        (currentName || "名無し") + "さんのタイプは…";
+      const badge = document.getElementById("result-type-badge");
+      badge.textContent = type;
+      badge.className = "result-type-badge";
+      if (type.includes("S")) badge.classList.add("type-S");
+      else if (type.includes("M")) badge.classList.add("type-M");
+      else badge.classList.add("type-B");
+
+      document.getElementById("result-comment").textContent = info.comment;
+      document.getElementById("result-desc").textContent = info.desc;
+
+      document.getElementById("label-S").textContent = `S度 ${Spercent}%`;
+      document.getElementById("label-M").textContent = `M度 ${Mpercent}%`;
+      document.getElementById("bar-S").style.width = Spercent + "%";
+      document.getElementById("bar-M").style.width = Mpercent + "%";
+
+      showPage("page-result");
+    }
+
+    // イベント設定
+    window.addEventListener("DOMContentLoaded", () => {
+      renderRanking();
+
+      document.getElementById("btn-start").addEventListener("click", () => {
+        const nameInput = document.getElementById("input-name");
+        currentName = nameInput.value.trim();
+        if (!currentName) {
+          alert("名前を入力してください（ニックネームでもOKです）");
+          return;
+        }
+        currentIndex = 0;
+        answers = [];
+        document.getElementById("quiz-progress").style.width = "0%";
+        document.getElementById("quiz-name-label").textContent = `対象：${currentName}`;
+        renderQuestion();
+        showPage("page-quiz");
+      });
+
+      document.getElementById("btn-back-home").addEventListener("click", () => {
+        if (confirm("診断を中断してホームに戻りますか？")) {
+          showPage("page-home");
+        }
+      });
+
+      document.getElementById("btn-again").addEventListener("click", () => {
+        currentIndex = 0;
+        answers = [];
+        renderQuestion();
+        showPage("page-quiz");
+      });
+
+      document.getElementById("btn-to-home").addEventListener("click", () => {
+        showPage("page-home");
+      });
+    });
+  </script>
 </body>
 </html>
