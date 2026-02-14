@@ -229,31 +229,53 @@ p {
 }
 
 /* ================================
-   Answer Buttons（ランダム配置）
+   ラベル（左右ランダム）
 ================================ */
-.scale-row {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  margin-bottom: 8px;
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: #777;
 }
 
-.scale-option {
-  border-radius: 12px;
-  padding: 12px 10px;
-  font-size: 14px;
-  text-align: center;
+/* ================================
+   丸ボタン（大・中・小）
+================================ */
+.circle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.circle {
+  background: #FFE4F0;
+  border: 2px solid #FFD1E5;
+  border-radius: 50%;
   cursor: pointer;
-  border: 1px solid #FFD1E5;
-  background: #FFE4F0; /* ← パステル単色 */
-  color: #333;
-  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
-.scale-option.selected {
-  transform: scale(1.03);
+.circle.big {
+  width: 42px;
+  height: 42px;
+}
+
+.circle.mid {
+  width: 32px;
+  height: 32px;
+}
+
+.circle.small {
+  width: 24px;
+  height: 24px;
+}
+
+.circle.selected {
+  background: #FFB6CF;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  background: #FFB6CF; /* 選択時だけ少し濃く */
+  transform: scale(1.1);
 }
 
 /* ================================

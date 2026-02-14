@@ -12,14 +12,12 @@
     <!-- Page 1: Home -->
     <div id="page-home" class="page active">
 
-      <!-- Title Card -->
       <div class="card">
         <div class="badge">性格診断ゲーム</div>
         <div class="title-main">SM分析ツール</div>
         <div class="title-sub">あなたの「S度」と「M度」をゆるっと診断します</div>
       </div>
 
-      <!-- Ranking Card -->
       <div class="card">
         <h2>ランキング</h2>
         <p class="note">この端末で診断した結果が自動で記録されます。</p>
@@ -43,7 +41,6 @@
         <button id="btn-clear-history" class="btn-ghost btn full">履歴を削除する</button>
       </div>
 
-      <!-- Start Card -->
       <div class="card">
         <h2>診断をはじめる</h2>
         <p>名前を入力して「開始」を押すと、全10問の診断が始まります。</p>
@@ -73,9 +70,22 @@
 
         <div id="quiz-question" class="question-text"></div>
 
-        <div id="scale-row" class="scale-row"></div>
+        <!-- ラベル（左右ランダム） -->
+        <div class="label-row">
+          <span id="label-left"></span>
+          <span id="label-right"></span>
+        </div>
 
-        <p class="small-note">どれか1つをタップすると次の質問へ進みます。</p>
+        <!-- 丸ボタン（大・中・小） -->
+        <div class="circle-row">
+          <div class="circle big" data-value="0"></div>
+          <div class="circle mid" data-value="1"></div>
+          <div class="circle small" data-value="2"></div>
+          <div class="circle mid" data-value="3"></div>
+          <div class="circle big" data-value="4"></div>
+        </div>
+
+        <p class="small-note">丸をタップすると次の質問へ進みます。</p>
       </div>
 
       <div class="card">

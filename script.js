@@ -3,9 +3,9 @@
 ========================================================= */
 const questions = [
   {
-    text: "誰かにからかわれたとき、どんな反応をする？",
-    optionA: "すぐ言い返したくなる",
-    optionB: "なんか嬉しくなって笑ってしまう"
+    text: "誰かにからかわれたときどんな反応する？",
+    optionA: "すぐ言い返してしまう",
+    optionB: "なんかうれしくなってしまう"
   },
   {
     text: "グループでの話し合いでは？",
@@ -55,65 +55,6 @@ const questions = [
 ];
 
 /* =========================================================
-   5段階 → S/Mスコア変換
-========================================================= */
-function getScore(value) {
-  switch (value) {
-    case 0: return { S: 2, M: 0 };
-    case 1: return { S: 1, M: 0 };
-    case 2: return { S: 0, M: 0 };
-    case 3: return { S: 0, M: 1 };
-    case 4: return { S: 0, M: 2 };
-  }
-  return { S: 0, M: 0 };
-}
-
-/* =========================================================
-   タイプ判定
-========================================================= */
-function judgeType(S, M) {
-  const diff = S - M;
-  if (diff >= 6) return "ドSタイプ";
-  if (diff >= 3) return "ちょいSタイプ";
-  if (diff <= -6) return "ドMタイプ";
-  if (diff <= -3) return "ちょいMタイプ";
-  return "バランスタイプ";
-}
-
-/* =========================================================
-   タイプごとの説明文
-========================================================= */
-function getTypeInfo(type) {
-  switch (type) {
-    case "ドSタイプ":
-      return {
-        comment: "主導権は渡さない、頼れるドSタイプ。",
-        desc: "決断力があり、場を引っ張るのが得意なタイプ。ツッコミやいじりも多めですが、本気で嫌がるラインはちゃんと分かっているはず…たぶん。"
-      };
-    case "ちょいSタイプ":
-      return {
-        comment: "やるときはやる、ちょいSバランス。",
-        desc: "普段は穏やかだけれど、ここぞというときは主導権を取れるタイプ。いじるのもいじられるのも、どちらもこなせる器用さがあります。"
-      };
-    case "ドMタイプ":
-      return {
-        comment: "愛されいじられキャラなドMタイプ。",
-        desc: "相手に合わせるのが得意で、空気を読む力が高いタイプ。いじられても、なんだかんだ楽しんでいるところも。周りからは「優しい」「話しやすい」と思われがちです。"
-      };
-    case "ちょいMタイプ":
-      return {
-        comment: "平和主義な、ちょいMバランス。",
-        desc: "自分からグイグイ行くより、相手に合わせる方が楽なタイプ。でも、ちゃんと自分の意見も持っている柔らかいバランス型です。"
-      };
-    default:
-      return {
-        comment: "バランス感覚のいいニュートラルタイプ。",
-        desc: "SっぽさもMっぽさもほどよく持ち合わせたバランス型。相手や場面に合わせて、自然に立ち位置を変えられる柔軟さがあります。"
-      };
-  }
-}
-
-/* =========================================================
    localStorage 保存
 ========================================================= */
 function saveResult(name, Spercent, Mpercent, type) {
@@ -131,7 +72,7 @@ function saveResult(name, Spercent, Mpercent, type) {
 }
 
 /* =========================================================
-   ランキング取得
+   ランキング取得・描画
 ========================================================= */
 function getRanking() {
   const history = JSON.parse(localStorage.getItem("sm_history") || "[]");
@@ -140,9 +81,6 @@ function getRanking() {
   return { sRank, mRank };
 }
 
-/* =========================================================
-   ランキング描画
-========================================================= */
 function renderRanking() {
   const { sRank, mRank } = getRanking();
   const sArea = document.getElementById("s-ranking");
@@ -179,7 +117,7 @@ let currentIndex = 0;
 let answers = [];
 
 /* -----------------------------
-   質問描画（回答ランダム配置）
+   質問描画（丸ボタンUI）
 ----------------------------- */
 function renderQuestion() {
   const q = questions[currentIndex];
@@ -192,50 +130,55 @@ function renderQuestion() {
   const progress = ((currentIndex) / total) * 100;
   document.getElementById("quiz-progress").style.width = progress + "%";
 
-  const row = document.getElementById("scale-row");
-  row.innerHTML = "";
+  // ラベル左右ランダム
+  const isReversed = Math.random() < 0.5;
 
-  // ラベルと値をセット
-  let labels = [
-    { text: q.optionA, value: 0 },
-    { text: "どちらかといえばA", value: 1 },
-    { text: "中立", value: 2 },
-    { text: "どちらかといえばB", value: 3 },
-    { text: q.optionB, value: 4 }
-  ];
+  const leftLabel = document.getElementById("label-left");
+  const rightLabel = document.getElementById("label-right");
 
-  // ランダムシャッフル
-  labels.sort(() => Math.random() - 0.5);
+  if (isReversed) {
+    leftLabel.textContent = q.optionB;
+    rightLabel.textContent = q.optionA;
+  } else {
+    leftLabel.textContent = q.optionA;
+    rightLabel.textContent = q.optionB;
+  }
 
-  // ボタン生成
-  labels.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "scale-option";
-    div.dataset.value = item.value;
-    div.textContent = item.text;
+  // 丸ボタンの動作
+  const circles = document.querySelectorAll(".circle");
+  circles.forEach(circle => {
+    circle.classList.remove("selected");
 
-    div.addEventListener("click", () => selectAnswer(item.value, div));
-    row.appendChild(div);
+    circle.onclick = () => {
+      circles.forEach(c => c.classList.remove("selected"));
+      circle.classList.add("selected");
+
+      const value = Number(circle.dataset.value);
+
+      // スコア計算
+      let S = 0, M = 0;
+      if (value === 0) S = 2;
+      if (value === 1) S = 1;
+      if (value === 3) M = 1;
+      if (value === 4) M = 2;
+
+      // ラベルが逆ならスコアも反転
+      if (isReversed) {
+        [S, M] = [M, S];
+      }
+
+      answers[currentIndex] = { S, M };
+
+      setTimeout(() => {
+        if (currentIndex < questions.length - 1) {
+          currentIndex++;
+          renderQuestion();
+        } else {
+          finishQuiz();
+        }
+      }, 150);
+    };
   });
-}
-
-/* -----------------------------
-   回答選択
------------------------------ */
-function selectAnswer(value, element) {
-  document.querySelectorAll(".scale-option").forEach(el => el.classList.remove("selected"));
-  element.classList.add("selected");
-
-  answers[currentIndex] = value;
-
-  setTimeout(() => {
-    if (currentIndex < questions.length - 1) {
-      currentIndex++;
-      renderQuestion();
-    } else {
-      finishQuiz();
-    }
-  }, 160);
 }
 
 /* -----------------------------
@@ -245,14 +188,14 @@ function finishQuiz() {
   let S = 0, M = 0;
 
   answers.forEach(v => {
-    const s = getScore(v);
-    S += s.S;
-    M += s.M;
+    S += v.S;
+    M += v.M;
   });
 
   const total = S + M || 1;
   const Spercent = Math.round((S / total) * 100);
   const Mpercent = Math.round((M / total) * 100);
+
   const type = judgeType(S, M);
   const info = getTypeInfo(type);
 
@@ -281,12 +224,56 @@ function finishQuiz() {
 }
 
 /* =========================================================
+   タイプ判定
+========================================================= */
+function judgeType(S, M) {
+  const diff = S - M;
+  if (diff >= 6) return "ドSタイプ";
+  if (diff >= 3) return "ちょいSタイプ";
+  if (diff <= -6) return "ドMタイプ";
+  if (diff <= -3) return "ちょいMタイプ";
+  return "バランスタイプ";
+}
+
+/* =========================================================
+   タイプ説明文
+========================================================= */
+function getTypeInfo(type) {
+  switch (type) {
+    case "ドSタイプ":
+      return {
+        comment: "主導権は渡さない、頼れるドSタイプ。",
+        desc: "決断力があり、場を引っ張るのが得意なタイプ。ツッコミやいじりも多めですが、本気で嫌がるラインはちゃんと分かっているはず…たぶん。"
+      };
+    case "ちょいSタイプ":
+      return {
+        comment: "やるときはやる、ちょいSバランス。",
+        desc: "普段は穏やかだけれど、ここぞというときは主導権を取れるタイプ。いじるのもいじられるのも、どちらもこなせる器用さがあります。"
+      };
+    case "ドMタイプ":
+      return {
+        comment: "愛されいじられキャラなドMタイプ。",
+        desc: "相手に合わせるのが得意で、空気を読む力が高いタイプ。いじられても、なんだかんだ楽しんでいるところも。周りからは「優しい」「話しやすい」と思われがちです。"
+      };
+    case "ちょいMタイプ":
+      return {
+        comment: "平和主義な、ちょいMバランス。",
+        desc: "自分からグイグイ行くより、相手に合わせる方が楽なタイプ。でも、ちゃんと自分の意見も持っている柔らかいバランス型です。"
+      };
+    default:
+      return {
+        comment: "バランス感覚のいいニュートラルタイプ。",
+        desc: "SっぽさもMっぽさもほどよく持ち合わせたバランス型。相手や場面に合わせて、自然に立ち位置を変えられる柔軟さがあります。"
+      };
+  }
+}
+
+/* =========================================================
    イベント設定
 ========================================================= */
 window.addEventListener("DOMContentLoaded", () => {
   renderRanking();
 
-  // 診断開始
   document.getElementById("btn-start").addEventListener("click", () => {
     const nameInput = document.getElementById("input-name");
     currentName = nameInput.value.trim();
@@ -304,14 +291,12 @@ window.addEventListener("DOMContentLoaded", () => {
     showPage("page-quiz");
   });
 
-  // ホームに戻る（途中で）
   document.getElementById("btn-back-home").addEventListener("click", () => {
     if (confirm("診断を中断してホームに戻りますか？")) {
       showPage("page-home");
     }
   });
 
-  // もう一度診断
   document.getElementById("btn-again").addEventListener("click", () => {
     currentIndex = 0;
     answers = [];
@@ -319,12 +304,10 @@ window.addEventListener("DOMContentLoaded", () => {
     showPage("page-quiz");
   });
 
-  // ホームへ
   document.getElementById("btn-to-home").addEventListener("click", () => {
     showPage("page-home");
   });
 
-  // 履歴削除
   document.getElementById("btn-clear-history").addEventListener("click", () => {
     if (confirm("本当に履歴を削除しますか？\nランキングも消えます。")) {
       localStorage.removeItem("sm_history");
