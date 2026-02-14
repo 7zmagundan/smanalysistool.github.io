@@ -498,43 +498,52 @@ p {
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
-/* ランキング1行のレイアウト */
+/* ランキング1行を表形式で揃える */
 .rank-row {
   display: grid;
   grid-template-columns: 32px 40px 1fr 50px; 
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   margin-bottom: 6px;
 }
 
-/* アイコン（通常） */
-.rank-icon {
-  width: 24px;
+/* 各列の基本スタイル */
+.rank-col {
+  font-size: 14px;
+  color: #333;
 }
 
-/* 1位だけ大きく */
+/* アイコン列 */
+.icon-col {
+  display: flex;
+  justify-content: center;
+}
+
+/* 通常アイコン */
+.rank-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 1位だけ大きく（幅は同じなのでズレない） */
 .rank-icon-top {
-  width: 32px;
+  width: 30px;
+  height: 30px;
 }
 
 /* 順位 */
-.rank-pos {
-  font-size: 14px;
-  color: #555;
+.pos-col {
   text-align: left;
+  color: #555;
 }
 
 /* 名前（長い場合は折り返し） */
-.rank-name {
-  font-size: 14px;
-  color: #333;
+.name-col {
   word-break: break-word;
 }
 
-/* S度 / M度 */
-.rank-score {
-  font-size: 14px;
-  color: #444;
+/* スコア（右揃え） */
+.score-col {
   text-align: right;
+  font-weight: 600;
 }
-

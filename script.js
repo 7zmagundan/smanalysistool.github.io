@@ -113,22 +113,27 @@ function renderRanking() {
   // ★ 最大3位まで
   sArea.innerHTML = sRank.slice(0, 3).map((r, i) =>
     `<div class="rank-row">
-       <img src="${RANKING_ICONS[r.type]}" class="rank-icon ${i === 0 ? "rank-icon-top" : ""}">
-       <span class="rank-pos">${i + 1}位</span>
-       <span class="rank-name">${r.name}</span>
-       <span class="rank-score">${r.Spercent}%</span>
+       <div class="rank-col icon-col">
+         <img src="${RANKING_ICONS[r.type]}" class="rank-icon ${i === 0 ? "rank-icon-top" : ""}">
+       </div>
+       <div class="rank-col pos-col">${i + 1}位</div>
+       <div class="rank-col name-col">${r.name}</div>
+       <div class="rank-col score-col">${r.Spercent}%</div>
      </div>`
   ).join("");
 
   mArea.innerHTML = mRank.slice(0, 3).map((r, i) =>
     `<div class="rank-row">
-       <img src="${RANKING_ICONS[r.type]}" class="rank-icon ${i === 0 ? "rank-icon-top" : ""}">
-       <span class="rank-pos">${i + 1}位</span>
-       <span class="rank-name">${r.name}</span>
-       <span class="rank-score">${r.Mpercent}%</span>
+       <div class="rank-col icon-col">
+         <img src="${RANKING_ICONS[r.type]}" class="rank-icon ${i === 0 ? "rank-icon-top" : ""}">
+       </div>
+       <div class="rank-col pos-col">${i + 1}位</div>
+       <div class="rank-col name-col">${r.name}</div>
+       <div class="rank-col score-col">${r.Mpercent}%</div>
      </div>`
   ).join("");
 }
+
 
 /* =========================================================
    ページ切り替え
