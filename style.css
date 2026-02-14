@@ -482,15 +482,7 @@ p {
 }
 
 }
-/* ランキングを縦並びにする */
-.ranking-container {
-  display: block !important;
-}
 
-.ranking-block {
-  width: 100%;
-  margin-bottom: 16px;
-}
 /* ランキングカードの背景 */
 .ranking-block {
   background: #FFF7FB;
@@ -546,4 +538,13 @@ p {
 .score-col {
   text-align: right;
   font-weight: 600;
+}
+/* ランキングタイトル（ドS／ドM）を必ず縦並びにする */
+.ranking-container {
+  display: block !important;
+}
+
+.ranking-block {
+  width: 100%;
+  margin-bottom: 16px;
 }
