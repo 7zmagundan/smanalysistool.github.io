@@ -465,14 +465,14 @@ p {
 /* 結果画面右上の印影（はんこ） */
 .result-stamp {
   position: absolute;
-  top: -4px;
-  right: -4px;
+  top: 0px;
+  right: 0px;
 
-  width: 16vw;       /* 画面幅の16% */
-  max-width: 70px;   /* 上限 */
-  min-width: 45px;   /* 下限 */
+  width: 16vw;
+  max-width: 70px;
+  min-width: 45px;
 
-  opacity: 0;
+  opacity: 1; /* ← ここを 1 にする */
   pointer-events: none;
   transform: rotate(-8deg) scale(0.8);
 }
