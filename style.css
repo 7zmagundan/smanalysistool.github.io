@@ -477,27 +477,10 @@ p {
   transform: rotate(-8deg) scale(0.8);
 }
 
-
 #page-result .card {
   position: relative;
-}@keyframes stampPop {
-  0% {
-    opacity: 0;
-    transform: rotate(-8deg) scale(0.4);
-  }
-  60% {
-    opacity: 1;
-    transform: rotate(-4deg) scale(1.15);
-  }
-  100% {
-    opacity: 1;
-    transform: rotate(-6deg) scale(1);
-  }
 }
 
-/* アニメーションを適用するクラス */
-.stamp-animate {
-  animation: stampPop 0.35s ease-out forwards;
 }
 /* ランキングを縦並びにする */
 .ranking-container {
@@ -515,15 +498,43 @@ p {
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
-/* 通常アイコン */
+/* ランキング1行のレイアウト */
+.rank-row {
+  display: grid;
+  grid-template-columns: 32px 40px 1fr 50px; 
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+/* アイコン（通常） */
 .rank-icon {
   width: 24px;
-  vertical-align: middle;
-  margin-right: 6px;
 }
 
 /* 1位だけ大きく */
 .rank-icon-top {
-  width: 34px;
+  width: 32px;
+}
+
+/* 順位 */
+.rank-pos {
+  font-size: 14px;
+  color: #555;
+  text-align: left;
+}
+
+/* 名前（長い場合は折り返し） */
+.rank-name {
+  font-size: 14px;
+  color: #333;
+  word-break: break-word;
+}
+
+/* S度 / M度 */
+.rank-score {
+  font-size: 14px;
+  color: #444;
+  text-align: right;
 }
 
