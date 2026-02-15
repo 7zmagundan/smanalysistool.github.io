@@ -253,6 +253,17 @@ function finishQuiz() {
   showPage("page-result");
 
 }
+/* =========================================================
+   平均S/M傾向
+========================================================= */
+const TYPE_TENDENCY = {
+  "ドSタイプ":   { S: 85, M: 15 },
+  "ちょいSタイプ": { S: 65, M: 35 },
+  "バランスタイプ": { S: 50, M: 50 },
+  "ちょいMタイプ": { S: 35, M: 65 },
+  "ドMタイプ":   { S: 15, M: 85 }
+};
+
 
 /* =========================================================
    タイプ判定
@@ -278,7 +289,7 @@ function getTypeInfo(type) {
       };
     case "ちょいSタイプ":
       return {
-        comment: "やるときはやる、ちょいSバランス。",
+        comment: "やるときはやる、ちょいSタイプ。",
         desc: "普段は穏やかだけれど、ここぞというときは主導権を取れるタイプ。いじるのもいじられるのも、どちらもこなせる器用さがあります。"
       };
     case "ドMタイプ":
@@ -288,7 +299,7 @@ function getTypeInfo(type) {
       };
     case "ちょいMタイプ":
       return {
-        comment: "平和主義な、ちょいMバランス。",
+        comment: "平和主義な、ちょいMタイプ。",
         desc: "自分からグイグイ行くより、相手に合わせる方が楽なタイプ。でも、ちゃんと自分の意見も持っている柔らかいバランス型です。"
       };
     default:
@@ -347,6 +358,58 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+/* =========================================================
+   タイプ説明ページ生成
+========================================================= */
+function renderTypeInfoPage() {
+  const area = document.getElementById("type-info-list");
+  const list = buildTypeInfoData();
+
+  area.innerHTML = list.map(t => `
+    <div class="card type-info-card">
+
+      <img src="${t.img}" class="type-info-badge" alt="${t.title}">
+
+      <div class="type-info-title">${t.title}</div>
+      <div class="type-info-comment">${t.comment}</div>
+      <div class="type-info-desc">${t.desc}</div>
+
+      <div class="type-graph">
+        <div class="bar-wrap">
+          <div class="bar-label">S度 ${t.tendency.S}%</div>
+          <div class="bar-bg"><div class="bar-inner-S" style="width:${t.tendency.S}%"></div></div>
+        </div>
+
+        <div class="bar-wrap">
+          <div class="bar-label">M度 ${t.tendency.M}%</div>
+          <div class="bar-bg"><div class="bar-inner-M" style="width:${t.tendency.M}%"></div></div>
+        </div>
+      </div>
+
+    </div>
+  `).join("");
+}
+
+/* =========================================================
+   タイプ説明ページ生成用データ
+========================================================= */
+function buildTypeInfoData() {
+  const types = ["ドSタイプ", "ちょいSタイプ", "バランスタイプ", "ちょいMタイプ", "ドMタイプ"];
+
+  return types.map(type => {
+    const info = getTypeInfo(type);
+    return {
+      type,
+      title: type,
+      comment: info.comment,
+      desc: info.desc,
+      img: BADGE_IMAGES[type],
+      tendency: TYPE_TENDENCY[type]
+    };
+  });
+}
+
 /* =========================================================
    丸ボタンの波紋エフェクト
 ========================================================= */
@@ -372,6 +435,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // LINEのテキスト共有（アプリ or ブラウザ）
     window.open(`https://line.me/R/msg/text/?${url}`, "_blank");
+    
+  });
+  // タイプ説明ページへ
+  document.getElementById("result-badge-img").addEventListener("click", () => {
+    renderTypeInfoPage();
+    showPage("page-type-info");
+  });
+
+  // 戻る
+  document.getElementById("btn-type-back").addEventListener("click", () => {
+    showPage("page-result");
   });
 
 });
