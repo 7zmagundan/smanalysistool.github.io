@@ -437,6 +437,14 @@ window.addEventListener("DOMContentLoaded", () => {
     window.open(`https://line.me/R/msg/text/?${url}`, "_blank");
     
   });
+  
+  
+  // タイプ説明ページへ
+  document.getElementById("btn-to-type-info").addEventListener("click", () => {
+    renderTypeInfoPage();
+    showPage("page-type-info");
+  });
+
   // タイプ説明ページへ
   document.getElementById("result-badge-img").addEventListener("click", () => {
     renderTypeInfoPage();
