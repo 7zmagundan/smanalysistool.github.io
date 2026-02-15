@@ -583,3 +583,45 @@ p {
 .type-graph {
   margin-top: 10px;
 }
+.type-info-card[data-type="ドSタイプ"] {
+  background: #ffe5e9;
+}
+
+.type-info-card[data-type="ちょいSタイプ"] {
+  background: #ffeef5;
+}
+
+.type-info-card[data-type="バランスタイプ"] {
+  background: #f3edff;
+}
+
+.type-info-card[data-type="ちょいMタイプ"] {
+  background: #e9f6ff;
+}
+
+.type-info-card[data-type="ドMタイプ"] {
+  background: #e3f2ff;
+}
+.type-info-mini-icon {
+  width: 60px;
+  display: block;
+  margin: 0 auto 8px;
+  opacity: 0.9;
+}
+.bar-inner-S,
+.bar-inner-M {
+  transition: width 0.8s ease;
+}
+#latest-result-card {
+  background: #FFF7FB;
+}
+
+.latest-type {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.latest-bars .bar-wrap {
+  margin-bottom: 6px;
+}

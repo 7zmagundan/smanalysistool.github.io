@@ -71,6 +71,10 @@ const RANKING_ICONS = {
   "ちょいMタイプ": "assets/images/ranking/ranking-icon-choim.png",
   "ドMタイプ": "assets/images/ranking/ranking-icon-dom.png",
 };
+/* =========================================================
+   ページ保持
+========================================================= */
+let lastPageBeforeTypeInfo = "page-home";
 
 /* =========================================================
    localStorage 保存
@@ -315,6 +319,7 @@ function getTypeInfo(type) {
 ========================================================= */
 window.addEventListener("DOMContentLoaded", () => {
   renderRanking();
+  renderLatestResult();
 
   document.getElementById("btn-start").addEventListener("click", () => {
     const nameInput = document.getElementById("input-name");
@@ -370,24 +375,35 @@ window.addEventListener("DOMContentLoaded", () => {
     window.open(`https://line.me/R/msg/text/?${url}`, "_blank");
     
   });
-  
+  document.getElementById("btn-save-image").addEventListener("click", () => {
+    const target = document.getElementById("page-result");
+
+    html2canvas(target, { scale: 2 }).then(canvas => {
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = "sm_result.png";
+      link.click();
+    });
+  });
+
   // タイプ説明ページへ
   document.getElementById("btn-to-type-info").addEventListener("click", () => {
+    lastPageBeforeTypeInfo = "page-home";
     renderTypeInfoPage();
     showPage("page-type-info");
   });
 
   // タイプ説明ページへ
   document.getElementById("result-badge-img").addEventListener("click", () => {
+    lastPageBeforeTypeInfo = "page-result";
     renderTypeInfoPage();
     showPage("page-type-info");
   });
 
   // 戻る
   document.getElementById("btn-type-back").addEventListener("click", () => {
-    showPage("page-result");
+    showPage(lastPageBeforeTypeInfo);
   });
-
 });
 
 /* =========================================================
@@ -398,14 +414,20 @@ function renderTypeInfoPage() {
   const list = buildTypeInfoData();
 
   area.innerHTML = list.map(t => `
-    <div class="card type-info-card">
+    <div class="card type-info-card" data-type="${t.type}">
 
+      <!-- バッジ画像 -->
       <img src="${t.img}" class="type-info-badge" alt="${t.title}">
 
+      <!-- ミニアイコン -->
+      <img src="${RANKING_ICONS[t.type]}" class="type-info-mini-icon" alt="mini icon">
+
+      <!-- タイトル・説明 -->
       <div class="type-info-title">${t.title}</div>
       <div class="type-info-comment">${t.comment}</div>
       <div class="type-info-desc">${t.desc}</div>
 
+      <!-- S/M グラフ -->
       <div class="type-graph">
         <div class="bar-wrap">
           <div class="bar-label">S度 ${t.tendency.S}%</div>
@@ -421,6 +443,7 @@ function renderTypeInfoPage() {
     </div>
   `).join("");
 }
+
 
 /* =========================================================
    タイプ説明ページ生成用データ
@@ -453,4 +476,36 @@ document.addEventListener("click", (e) => {
     circle.classList.add("ripple");
   }
 });
+/* =========================================================
+   最新結果
+========================================================= */
+function renderLatestResult() {
+  const history = JSON.parse(localStorage.getItem("sm_history") || "[]");
+  const card = document.getElementById("latest-result-card");
+  const area = document.getElementById("latest-result-content");
+
+  if (history.length === 0) {
+    card.style.display = "none";
+    return;
+  }
+
+  const latest = history[history.length - 1];
+
+  card.style.display = "block";
+  area.innerHTML = `
+    <div class="latest-type">${latest.name} さん：${latest.type}</div>
+
+    <div class="latest-bars">
+      <div class="bar-wrap">
+        <div class="bar-label">S度 ${latest.Spercent}%</div>
+        <div class="bar-bg"><div class="bar-inner-S" style="width:${latest.Spercent}%"></div></div>
+      </div>
+
+      <div class="bar-wrap">
+        <div class="bar-label">M度 ${latest.Mpercent}%</div>
+        <div class="bar-bg"><div class="bar-inner-M" style="width:${latest.Mpercent}%"></div></div>
+      </div>
+    </div>
+  `;
+}
 

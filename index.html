@@ -9,6 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 </head>
 <body>
   <div class="app">
@@ -32,6 +35,11 @@
         </div>
 
         <p class="small-note">※結果はこの端末の中だけに保存されます。</p>
+      </div>
+      
+      <div class="card" id="latest-result-card" style="display:none;">
+        <h2>あなたの最新結果</h2>
+        <div id="latest-result-content"></div>
       </div>
 
       <div class="card">
@@ -138,11 +146,12 @@
 
         <p class="small-note">※この結果はあくまでネタ診断です。深く考えず楽しんでください。</p>
       </div>
-
       <div class="card">
         <button id="btn-again" class="btn btn-secondary full">もう一度診断する</button>
         <button id="btn-to-home" class="btn-ghost btn full">ホームに戻る</button>
-        <!-- ★ 追加：LINEで結果をシェア -->
+        <button id="btn-save-image" class="btn full" style="margin-top: 8px; background:#444;">
+          結果を画像として保存
+        </button>
         <button id="btn-share-line" class="btn full" style="margin-top: 8px; background: #06C755;">
           LINEで結果をシェア
         </button>
