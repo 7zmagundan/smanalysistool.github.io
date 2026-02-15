@@ -376,13 +376,27 @@ window.addEventListener("DOMContentLoaded", () => {
     
   });
   document.getElementById("btn-save-image").addEventListener("click", () => {
-    const target = document.getElementById("page-result");
+    const target = document.getElementById("result-capture-area");
 
-    html2canvas(target, { scale: 2 }).then(canvas => {
-      const link = document.createElement("a");
-      link.href = canvas.toDataURL("image/png");
-      link.download = "sm_result.png";
-      link.click();
+    html2canvas(target, {
+      scale: 2,
+      backgroundColor: "#fff"
+    }).then(canvas => {
+      const dataUrl = canvas.toDataURL("image/png");
+
+      // ★ iPhone / iPad 判定
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      if (isIOS) {
+        // ★ iPhoneは新しいタブで開く（長押し保存）
+        window.open(dataUrl, "_blank");
+      } else {
+        // ★ PC / Android は通常ダウンロード
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "sm_result.png";
+        link.click();
+      }
     });
   });
 
