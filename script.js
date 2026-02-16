@@ -341,6 +341,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-back-home").addEventListener("click", () => {
     if (confirm("診断を中断してホームに戻りますか？")) {
       showPage("page-home");
+      renderLatestResult();
     }
   });
 
@@ -353,6 +354,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("btn-to-home").addEventListener("click", () => {
     showPage("page-home");
+    renderLatestResult();
   });
 
   document.getElementById("btn-clear-history").addEventListener("click", () => {
@@ -378,20 +380,24 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-save-image").addEventListener("click", () => {
     const target = document.getElementById("result-capture-area");
 
+    // ★ キャプチャ時だけ背景を白にする
+    const originalBg = target.style.background;
+    target.style.background = "#ffffff";
+
     html2canvas(target, {
       scale: 2,
       backgroundColor: "#fff"
     }).then(canvas => {
       const dataUrl = canvas.toDataURL("image/png");
 
-      // ★ iPhone / iPad 判定
+      // ★ 背景を元に戻す
+      target.style.background = originalBg;
+
       const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
       if (isIOS) {
-        // ★ iPhoneは新しいタブで開く（長押し保存）
         window.open(dataUrl, "_blank");
       } else {
-        // ★ PC / Android は通常ダウンロード
         const link = document.createElement("a");
         link.href = dataUrl;
         link.download = "sm_result.png";
