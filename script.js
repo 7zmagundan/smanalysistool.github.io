@@ -381,9 +381,10 @@ window.addEventListener("DOMContentLoaded", () => {
     const original = document.getElementById("result-capture-area");
     const layer = document.getElementById("capture-layer");
 
-    // ★ 結果カードを丸ごとコピー
-    layer.innerHTML = original.innerHTML;
+    // ★ 結果カードを「丸ごと」コピー（outerHTML が重要）
+    layer.innerHTML = original.outerHTML;
     layer.style.display = "block";
+    layer.style.background = "#ffffff";
 
     html2canvas(layer, {
       scale: 2,
@@ -407,7 +408,6 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-
 
   // タイプ説明ページへ
   document.getElementById("btn-to-type-info").addEventListener("click", () => {
