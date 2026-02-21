@@ -379,6 +379,10 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("btn-save-image").addEventListener("click", () => {
+
+    // ★ 絶対に必要：結果ページを表示状態にする
+    showPage("page-result");
+
     const target = document.getElementById("result-capture-area");
 
     const originalBg = target.style.background;
@@ -387,26 +391,29 @@ window.addEventListener("DOMContentLoaded", () => {
     target.style.background = "#ffffff";
     document.body.style.background = "#ffffff";
 
-    html2canvas(target, {
-      scale: 2,
-      backgroundColor: "#ffffff",
-      useCORS: true
-    }).then(canvas => {
+    // ★ 1フレーム待つ（Safari対策）
+    requestAnimationFrame(() => {
+      html2canvas(target, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true
+      }).then(canvas => {
 
-      target.style.background = originalBg;
-      document.body.style.background = originalBodyBg;
+        target.style.background = originalBg;
+        document.body.style.background = originalBodyBg;
 
-      const dataUrl = canvas.toDataURL("image/png");
-      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const dataUrl = canvas.toDataURL("image/png");
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-      if (isIOS) {
-        window.open(dataUrl, "_blank");
-      } else {
-        const link = document.createElement("a");
-        link.href = dataUrl;
-        link.download = "sm_result.png";
-        link.click();
-      }
+        if (isIOS) {
+          window.open(dataUrl, "_blank");
+        } else {
+          const link = document.createElement("a");
+          link.href = dataUrl;
+          link.download = "sm_result.png";
+          link.click();
+        }
+      });
     });
   });
 
