@@ -380,19 +380,24 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-save-image").addEventListener("click", () => {
     const target = document.getElementById("result-capture-area");
 
-    // ★ キャプチャ時だけ背景を白にする
+    // ★ キャプチャ時だけ背景を白にする（target）
     const originalBg = target.style.background;
     target.style.background = "#ffffff";
 
+    // ★ body の背景も白にする（←これが決定打）
+    const originalBodyBg = document.body.style.background;
+    document.body.style.background = "#ffffff";
+
     html2canvas(target, {
       scale: 2,
-      backgroundColor: "#fff"
+      backgroundColor: "#ffffff"
     }).then(canvas => {
-      const dataUrl = canvas.toDataURL("image/png");
 
-      // ★ 背景を元に戻す
+      // ★ 元に戻す
       target.style.background = originalBg;
+      document.body.style.background = originalBodyBg;
 
+      const dataUrl = canvas.toDataURL("image/png");
       const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
       if (isIOS) {
