@@ -378,26 +378,23 @@ window.addEventListener("DOMContentLoaded", () => {
     
   });
   document.getElementById("btn-save-image").addEventListener("click", () => {
-    const target = document.getElementById("result-capture-area");
+    const original = document.getElementById("result-capture-area");
+    const layer = document.getElementById("capture-layer");
 
-    // ★ キャプチャ時だけ背景を白にする（target）
-    const originalBg = target.style.background;
-    target.style.background = "#ffffff";
+    // ★ 結果カードを丸ごとコピー
+    layer.innerHTML = original.innerHTML;
+    layer.style.display = "block";
 
-    // ★ body の背景も白にする（←これが決定打）
-    const originalBodyBg = document.body.style.background;
-    document.body.style.background = "#ffffff";
-
-    html2canvas(target, {
+    html2canvas(layer, {
       scale: 2,
       backgroundColor: "#ffffff"
     }).then(canvas => {
-
-      // ★ 元に戻す
-      target.style.background = originalBg;
-      document.body.style.background = originalBodyBg;
-
       const dataUrl = canvas.toDataURL("image/png");
+
+      // ★ レイヤーを消す
+      layer.style.display = "none";
+      layer.innerHTML = "";
+
       const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
       if (isIOS) {
@@ -410,6 +407,7 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
 
   // タイプ説明ページへ
   document.getElementById("btn-to-type-info").addEventListener("click", () => {
