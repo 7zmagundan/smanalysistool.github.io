@@ -377,25 +377,26 @@ window.addEventListener("DOMContentLoaded", () => {
     window.open(`https://line.me/R/msg/text/?${url}`, "_blank");
     
   });
+
   document.getElementById("btn-save-image").addEventListener("click", () => {
-    const original = document.getElementById("result-capture-area");
-    const layer = document.getElementById("capture-layer");
+    const target = document.getElementById("result-capture-area");
 
-    // ★ 結果カードを「丸ごと」コピー（outerHTML が重要）
-    layer.innerHTML = original.outerHTML;
-    layer.style.display = "block";
-    layer.style.background = "#ffffff";
+    const originalBg = target.style.background;
+    const originalBodyBg = document.body.style.background;
 
-    html2canvas(layer, {
+    target.style.background = "#ffffff";
+    document.body.style.background = "#ffffff";
+
+    html2canvas(target, {
       scale: 2,
-      backgroundColor: "#ffffff"
+      backgroundColor: "#ffffff",
+      useCORS: true
     }).then(canvas => {
+
+      target.style.background = originalBg;
+      document.body.style.background = originalBodyBg;
+
       const dataUrl = canvas.toDataURL("image/png");
-
-      // ★ レイヤーを消す
-      layer.style.display = "none";
-      layer.innerHTML = "";
-
       const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
       if (isIOS) {

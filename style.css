@@ -107,7 +107,7 @@ p {
   padding: 10px 14px;
   font-size: 14px;
   outline: none;
-  background: #FFFFFFCC;
+  background: #ffffff;
 }
 
 .input-text:focus {
@@ -624,4 +624,7 @@ p {
 
 .latest-bars .bar-wrap {
   margin-bottom: 6px;
+}
+#result-capture-area {
+  background: #ffffff !important;
 }
